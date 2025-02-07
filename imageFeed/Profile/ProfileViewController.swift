@@ -7,120 +7,86 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-
+final class ProfileViewController: UIViewController {
     
-    @IBOutlet weak var avatarImage: UIImageView!
+    private var avatarImage: UIImageView = {
+        let view=UIImageView()
+        let image=UIImage(named:"avatar")
+        view.image=image
+        return view
+    }()
     
-    @IBOutlet weak var loginNameLabel: UILabel!
+    private var loginNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "@ekaterina_nov"
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .yPgrey
+        return label
+    }()
+    private var nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Екатерина Новикова"
+        label.font = .systemFont(ofSize: 23, weight: .semibold)
+        label.textColor = .yPwhite
+        return label
+    }()
+    private var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Hello, world!"
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .yPwhite
+        return label
+    }()
     
-    @IBOutlet weak var nameLabel: UILabel!
-    
-    @IBOutlet weak var logOutButton: UIButton!
-    
-    @IBOutlet weak var descriptionLabel: UILabel!
+    private var logOutButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        let avatarImage=UIImageView(image:UIImage(named:"avatar"))
-        
-        imageSettings(UIImage: avatarImage)
-        
-        self.avatarImage=avatarImage
-        
-        let nameLabel=UILabel()
-        
-        labelSettings(UIlabel: nameLabel, choiseBefore: "ImageView", Before1: avatarImage, Before2: nameLabel, text: "Екатерина Новикова", font: .systemFont(ofSize: 23, weight: .semibold) , textColor: .yPwhite)
-        
-        self.nameLabel=nameLabel
-        
-        let loginNameLabel=UILabel()
-        
-        labelSettings(UIlabel: loginNameLabel, choiseBefore: "label", Before1: avatarImage,Before2: nameLabel, text: "@ekaterina_nov", font: .systemFont(ofSize: 13, weight: .regular), textColor: .yPgrey)
-        
-        self.loginNameLabel=loginNameLabel
-        
-        let descriptionLabel=UILabel()
-        
-        labelSettings(UIlabel: descriptionLabel, choiseBefore: "label", Before1: avatarImage,Before2: loginNameLabel, text: "Hello, world!", font: .systemFont(ofSize: 13, weight: .regular), textColor: .yPwhite)
-        self.descriptionLabel=descriptionLabel
-        
-        let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button")!, target: self, action: #selector(self.logout_button_action))
-        
-        buttonSettings(UIButton: logOutButton, textColor: .redYP, UiImage: avatarImage)
-        
-        self.logOutButton=logOutButton
-       
+        imageSettings(image: avatarImage)
+        labelSettings(UIlabel: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
+        labelSettings(UIlabel: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
+        labelSettings(UIlabel: descriptionLabel, choiseBefore: "label", before1: avatarImage,before2: loginNameLabel)
+        let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
+        buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
+        self.logOutButton = logOutButton
     }
     
-    private func labelSettings(UIlabel: UILabel,choiseBefore:String,Before1: UIImageView,Before2: UILabel,text: String,font: UIFont,textColor: UIColor)
+    private func labelSettings(UIlabel: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
     {
-        
-        UIlabel.text = text
-        
-        UIlabel.font = font
-        
-        UIlabel.textColor = textColor
-        
         UIlabel.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(UIlabel)
-        
-        if choiseBefore == "label"{
-            
-            UIlabel.topAnchor.constraint(equalTo: Before2.bottomAnchor, constant: 8).isActive = true
-            
+        if choiseBefore == "label" {
+            UIlabel.topAnchor.constraint(equalTo: before2.bottomAnchor, constant: 8).isActive = true
+        } else {
+            UIlabel.topAnchor.constraint(equalTo: before1.bottomAnchor, constant: 8).isActive = true
         }
-        
-        else{
-            
-            UIlabel.topAnchor.constraint(equalTo: Before1.bottomAnchor, constant: 8).isActive = true
-            
-        }
-        
         UIlabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        
     }
     
-    private func imageSettings(UIImage: UIImageView){
-        
-        UIImage.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(UIImage)
-        
-        UIImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 16).isActive = true
-        
-        UIImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        
-        UIImage.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        
-        UIImage.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
+    private func imageSettings(image: UIImageView){
+        image.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(image)
+        image.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 16).isActive = true
+        image.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        image.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        image.heightAnchor.constraint(equalToConstant: 70).isActive = true
     }
     
-    private func buttonSettings(UIButton: UIButton,textColor: UIColor,UiImage: UIImageView){
-        
-        UIButton.tintColor = textColor
-        
-        UIButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(UIButton)
-        
-        UIButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -16).isActive = true
-        
-        UIButton.centerYAnchor.constraint(equalTo: UiImage.centerYAnchor).isActive = true
-        
-        UIButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        
-        UIButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        
+    private func buttonSettings(button: UIButton,textColor: UIColor,image: UIImageView){
+        button.tintColor = textColor
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -16).isActive = true
+        button.centerYAnchor.constraint(equalTo: image.centerYAnchor).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
 
-    
-    @IBAction func logout_button_action(_ sender: Any) {
-        
+    @objc private func logoutButtonAction() {
+        // TODO: - Добавить логику при нажатии на кнопку
     }
     
 
