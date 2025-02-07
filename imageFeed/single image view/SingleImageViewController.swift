@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class singleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     
     var image: UIImage?{
         didSet {
@@ -74,7 +74,7 @@ final class singleImageViewController: UIViewController {
 
 }
 
-extension singleImageViewController: UIScrollViewDelegate {
+extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return singleImage
     }
