@@ -9,16 +9,16 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    @IBOutlet weak var singleImage: UIImageView!
+    
     var image: UIImage?{
         didSet {
             guard isViewLoaded else { return }
             imgSetAndSize()
         }
     }
-    
-    @IBOutlet weak var scrollView: UIScrollView!
-    
-    @IBOutlet weak var singleImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

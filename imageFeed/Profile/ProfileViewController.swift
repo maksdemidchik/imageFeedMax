@@ -54,6 +54,10 @@ final class ProfileViewController: UIViewController {
         self.logOutButton = logOutButton
     }
     
+    @objc private func logoutButtonAction() {
+        // TODO: - Добавить логику при нажатии на кнопку
+    }
+
     private func labelSettings(UIlabel: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
     {
         UIlabel.translatesAutoresizingMaskIntoConstraints = false
@@ -84,10 +88,5 @@ final class ProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 44).isActive = true
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
-
-    @objc private func logoutButtonAction() {
-        // TODO: - Добавить логику при нажатии на кнопку
-    }
-    
 
 }
