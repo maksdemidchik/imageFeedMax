@@ -46,9 +46,9 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageSettings(image: avatarImage)
-        labelSettings(UIlabel: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
-        labelSettings(UIlabel: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
-        labelSettings(UIlabel: descriptionLabel, choiseBefore: "label", before1: avatarImage,before2: loginNameLabel)
+        labelSettings(label: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
+        labelSettings(label: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
+        labelSettings(label: descriptionLabel, choiseBefore: "label", before1: avatarImage,before2: loginNameLabel)
         let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
         buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
         self.logOutButton = logOutButton
@@ -58,16 +58,16 @@ final class ProfileViewController: UIViewController {
         // TODO: - Добавить логику при нажатии на кнопку
     }
 
-    private func labelSettings(UIlabel: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
+    private func labelSettings(label: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
     {
-        UIlabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(UIlabel)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
         if choiseBefore == "label" {
-            UIlabel.topAnchor.constraint(equalTo: before2.bottomAnchor, constant: 8).isActive = true
+            label.topAnchor.constraint(equalTo: before2.bottomAnchor, constant: 8).isActive = true
         } else {
-            UIlabel.topAnchor.constraint(equalTo: before1.bottomAnchor, constant: 8).isActive = true
+            label.topAnchor.constraint(equalTo: before1.bottomAnchor, constant: 8).isActive = true
         }
-        UIlabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
     }
     
     private func imageSettings(image: UIImageView){
