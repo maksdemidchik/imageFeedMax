@@ -143,7 +143,7 @@
                                     <segue destination="D6d-9h-Mq8" kind="show" identifier="ShowWebView" id="Hgf-oo-Aog"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="LlR-pE-fB8">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vector" translatesAutoresizingMaskIntoConstraints="NO" id="LlR-pE-fB8">
                                 <rect key="frame" x="171" y="407" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Dny-zC-67p"/>
@@ -356,12 +356,12 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="1. Splash Screen (базовая версия)" width="72.666664123535156" height="75.333335876464844"/>
-        <image name="Vector" width="60" height="60"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button_white" width="24" height="24"/>
         <image name="share_button" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
+        <image name="vector" width="60" height="60"/>
         <namedColor name="Color">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
