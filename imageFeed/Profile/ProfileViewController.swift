@@ -10,9 +10,9 @@ import UIKit
 final class ProfileViewController: UIViewController {
     
     private var avatarImage: UIImageView = {
-        let view=UIImageView()
-        let image=UIImage(named:"avatar")
-        view.image=image
+        let view = UIImageView()
+        let image = UIImage(named:"avatar")
+        view.image = image
         return view
     }()
     
