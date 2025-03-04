@@ -42,8 +42,7 @@ final class WebViewViewController: UIViewController {
         let backButton = UIButton.systemButton(with: UIImage(named: "nav_back_button_white") ?? UIImage(), target: self, action: #selector(self.backButtonAction))
         buttonSettings(button: backButton)
         self.backButton = backButton
-        progressView.topAnchor.constraint(equalTo: backButton.topAnchor,constant: 8).isActive = true
-        webView.topAnchor.constraint(equalTo: backButton.topAnchor,constant: 8).isActive = true
+       
     }
     
     override func viewDidAppear(_ animated: Bool) {
