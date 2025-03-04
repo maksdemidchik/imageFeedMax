@@ -74,8 +74,10 @@ final class SplashViewController: UIViewController {
                 self.switchToTabBarController()
                 let profile=Profile(username: profile.username, name: profile.name, loginName: profile.loginName, bio: profile.bio)
                 self.profileService.profile = profile
-                profileImageService.fetchProfileImageURL(username: profile.username){ _ in }
-                UIBlockingProgressHUD.dismiss()
+                self.profileImageService.fetchProfileImageURL(username: profile.username){_ in 
+                    
+                }
+                
 
             case .failure(let error):
                print("Error in fetchProfile:\(error)")
@@ -91,6 +93,7 @@ final class SplashViewController: UIViewController {
             switch result {
             case .success:
                 self.fetchProfile{
+                    print(111)
                    UIBlockingProgressHUD.dismiss()
                 }
             case .failure:
