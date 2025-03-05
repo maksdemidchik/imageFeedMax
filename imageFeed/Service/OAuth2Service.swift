@@ -7,7 +7,17 @@
 
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
+    
+    private let urlSession = URLSession.shared
+    
+    private var task: URLSessionTask?
+    
+    private var lastCode: String?
     
     var token : String?{
         get {
@@ -22,31 +32,32 @@ final class OAuth2Service {
     
     private init() {}
     
-    func fetchOAuthToken(code: String, completion: @escaping (Result<String,Error>) -> Void)
-    {
-        let request = makeOAuthTokenRequest(code: code)
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String,Error>) -> Void) {
         
-        let task = URLSession.shared.data(for: request){ [weak self] result in
+        assert(Thread.isMainThread)
+        
+        guard  lastCode != code else{
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        let request = makeOAuthTokenRequest(code: code)
+        let task = URLSession.shared.objectTask(for: request){ [weak self] (result:Result<OAuthTokenResponseBody,Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let data):
-                do {
-                    let response = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    self.token = response.accessToken
-                    completion(.success(response.accessToken))
-                }
-                catch{
-                    print("ошибка декодирования \(error)")
-                    completion(.failure(error))
-                    return
-                }
-                
+            case .success(let tokenResponse):
+                let accesstoken = tokenResponse.accessToken
+                self.token = accesstoken
+                completion(.success(accesstoken))
             case .failure(let error):
-                print("ошибка сети \(error)")
+                print("Error in OAuth2Service (fetchOAuthToken) : \(error)")
                 completion(.failure(error))
-                return
             }
+            self.task = nil
+            self.lastCode = nil
         }
+        self.task = task
         task.resume()
     }
     

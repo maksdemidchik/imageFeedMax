@@ -10,7 +10,7 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
-    
+    private var beerToken = OAuth2TokenStorage().beerToken
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private let dataCurrent = Date()
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
@@ -24,6 +24,7 @@ final class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {

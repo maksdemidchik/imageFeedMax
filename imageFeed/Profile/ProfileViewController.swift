@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private let profileService = ProfileService.sharedProfile
+    private var beerToken = OAuth2TokenStorage().beerToken
     private var avatarImage: UIImageView = {
         let view = UIImageView()
         let image = UIImage(named:"avatar")
@@ -45,6 +48,13 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let profile = profileService.profile else {
+            print("error")
+            return
+        }
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
         imageSettings(image: avatarImage)
         labelSettings(label: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
         labelSettings(label: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
@@ -52,6 +62,13 @@ final class ProfileViewController: UIViewController {
         let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
         buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
         self.logOutButton = logOutButton
+        profileImageServiceObserver=NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){[weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+            
+        }
+        self.view.backgroundColor = .ypBlack
+        updateAvatar()
     }
     
     @objc private func logoutButtonAction() {
@@ -87,6 +104,14 @@ final class ProfileViewController: UIViewController {
         button.centerYAnchor.constraint(equalTo: image.centerYAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: 44).isActive = true
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
+    }
+    func updateAvatar(){
+        guard let profileImageUrl = ProfileImageService.shared.avatarURL,let url = URL(string: profileImageUrl) else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 90,backgroundColor: .ypBlack)
+        avatarImage.kf.indicatorType = .activity
+        avatarImage.kf.setImage(with: url,
+                              placeholder: UIImage(named: "placeholder.jpeg"),
+                              options: [.processor(processor)])
     }
 
 }

@@ -21,50 +21,42 @@ protocol WebViewViewControllerDelegate: AnyObject {
 final class WebViewViewController: UIViewController {
     
     @IBOutlet private weak var webView: WKWebView!
-    
     @IBOutlet private weak var progressView: UIProgressView!
     
+    private var backButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    
     weak var delegate: WebViewViewControllerDelegate?
+    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.navigationDelegate = self
+        estimatedProgressObservation=webView.observe( \.estimatedProgress,options: []){ [weak self] _, _ in
+                guard let self = self else { return }
+                self.updateProgress()
+        }
         loadAuthView()
-        updateProgress()
+        let backButton = UIButton.systemButton(with: UIImage(named: "nav_back_button_white") ?? UIImage(), target: self, action: #selector(self.backButtonAction))
+        buttonSettings(button: backButton)
+        self.backButton = backButton
+        progressView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor,constant: 8).isActive=true
+        webView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor,constant: 8).isActive=true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
         updateProgress()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
-    
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
-
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
+    
     
     
     private func loadAuthView() {
@@ -87,6 +79,19 @@ final class WebViewViewController: UIViewController {
         let request = URLRequest(url: url)
         webView.load(request)
     }
+    private func buttonSettings(button: UIButton){
+        button.tintColor = .ypBlack
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        button.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor,constant: 9).isActive=true
+        button.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 9).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
+    }
+    
+    @objc private func backButtonAction() {
+        dismiss(animated: true)
+    }
 
 }
 
@@ -105,6 +110,7 @@ extension WebViewViewController: WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
+    
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if
