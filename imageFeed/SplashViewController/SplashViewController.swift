@@ -131,7 +131,8 @@ final class SplashViewController: UIViewController {
     private func showAlert(){
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.alertPres.showAlert(self, title: "Что-то пошло не так", message: "Не удалось войти в систему", ButtonTitle: "Ок"){
+            self.alertPres.showAlert(self, title: "Что-то пошло не так", message: "Не удалось войти в систему", ButtonTitle: "Ок"){[weak self] in
+                guard let self = self else { return }
                 self.transitionDuringAuthorization()
                 UIBlockingProgressHUD.dismiss()
             }
