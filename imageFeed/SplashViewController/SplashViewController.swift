@@ -10,30 +10,19 @@ import UIKit
 final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
     private let profileImageService = ProfileImageService.shared
+    private let profileService = ProfileService.sharedProfile
     private let showAuthenticationScreenIdentifier = "ShowAuthenticationScreen"
+    private let alertPres=AlertPresenter.shared
     private var splashImage: UIImageView{
         let imgView=UIImageView()
         let img=UIImage(named: "1. Splash Screen (базовая версия) 1")
         imgView.image=img
         return imgView
     }
-    private let profileService = ProfileService.sharedProfile
     private var beerToken = OAuth2TokenStorage().beerToken
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let token = OAuth2TokenStorage().beerToken {
-            UIBlockingProgressHUD.show()
-            self.fetchProfile{ [weak self] in
-                guard let self = self else { return }
-                self.switchToTabBarController()
-                UIBlockingProgressHUD.dismiss()
-            }
-            
-           
-        }
-        else {
-            goToAuthViewController()
-        }
+        transitionDuringAuthorization()
         
     }
     
@@ -67,8 +56,6 @@ final class SplashViewController: UIViewController {
                 print("error")
                 return
             }
-          
-            print("start")
             switch result {
             case .success(let profile):
                 self.switchToTabBarController()
@@ -93,14 +80,11 @@ final class SplashViewController: UIViewController {
             switch result {
             case .success:
                 self.fetchProfile{
-                    print(111)
+                  
                    UIBlockingProgressHUD.dismiss()
                 }
             case .failure:
-                AlertPresenter.shared.showAlert(self, title: "Что-то пошло не так", message: "Не удалось войти в систему", ButtonTitle: "Ок"){
-                    print(1)
-                    UIBlockingProgressHUD.dismiss()
-                }
+                showAlert()
                 
             }
         }
@@ -128,6 +112,30 @@ final class SplashViewController: UIViewController {
         present(vc, animated: true)
         print("auth")
           
+    }
+    
+    private func transitionDuringAuthorization(){
+        if let token = OAuth2TokenStorage().beerToken {
+            UIBlockingProgressHUD.show()
+            self.fetchProfile{ [weak self] in
+                guard let self = self else { return }
+                self.switchToTabBarController()
+                UIBlockingProgressHUD.dismiss()
+            }
+        }
+        else {
+            goToAuthViewController()
+        }
+    }
+    
+    private func showAlert(){
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.alertPres.showAlert(self, title: "Что-то пошло не так", message: "Не удалось войти в систему", ButtonTitle: "Ок"){
+                self.transitionDuringAuthorization()
+                UIBlockingProgressHUD.dismiss()
+            }
+        }
     }
    
 }

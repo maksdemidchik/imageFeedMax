@@ -63,7 +63,7 @@ extension URLSession {
                     fulfillCompletionOnTheMainThread(.success(resultDecode))
                 }
                 catch{
-                    print("Error in decode: \(error.localizedDescription) in \(String(data: data, encoding: .utf8) ?? "")")
+                    print("Error in decode: \(error.localizedDescription) ,Data:\(String(data: data, encoding: .utf8) ?? "")")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.decodeError))
                 }
             case .failure(let error):
