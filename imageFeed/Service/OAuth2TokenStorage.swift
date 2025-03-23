@@ -10,6 +10,10 @@ import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage{
     
+    static let shared = OAuth2TokenStorage()
+    
+    private init() {}
+    
     private enum Keys: String {
         case beerToken
     }
@@ -31,6 +35,11 @@ final class OAuth2TokenStorage{
          
         }
     }
-    
+    func clean(){
+        guard KeychainWrapper.standard.removeObject(forKey: Keys.beerToken.rawValue) else {
+                print("Error cleaning Keychain")
+            return
+        }
+    }
     
 }

@@ -20,4 +20,15 @@ class AlertPresenter{
         alert.addAction(action)
         vc.present(alert, animated: true)
     }
+    func showAlertTwoButton(_ vc: UIViewController,title: String, message: String,ButtonTitle: String,ButtonTitle2: String, onCompletion: @escaping(() -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: ButtonTitle, style: .default) { _ in
+            onCompletion()
+        }
+        let action2 = UIAlertAction(title: ButtonTitle2, style: .default) { _ in
+        }
+        alert.addAction(action)
+        alert.addAction(action2)
+        vc.present(alert, animated: true)
+    }
 }

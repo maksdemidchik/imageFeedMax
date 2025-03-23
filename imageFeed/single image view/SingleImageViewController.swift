@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
+    private let alert = AlertPresenter.shared
     
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var singleImage: UIImageView!
-    
+    var photoUrl: String?
     var image: UIImage?{
         didSet {
             guard isViewLoaded else { return }
@@ -24,6 +26,8 @@ final class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
+        guard let stringURL = photoUrl,let url = URL(string: stringURL) else { return }
+        loadAndSetImage(fullImageURL: url)
         imgSetAndSize()
     }
     
@@ -52,6 +56,7 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+        
     }
 
     private func imgSetAndSize(){
@@ -60,7 +65,27 @@ final class SingleImageViewController: UIViewController {
         singleImage.frame.size = image.size
         rescaleAndCenterImageInScrollView(image: image)
     }
+    private func loadAndSetImage(fullImageURL:URL) {
+        UIBlockingProgressHUD.show()
+        singleImage.kf.setImage(with: fullImageURL) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.imgSetAndSize()
+            case .failure:
+                self.showError()
+            }
+        }
+    }
     
+    private func showError(){
+        alert.showAlertTwoButton(self, title: "Что-то пошло не так", message: "Попробовать ещё раз?", ButtonTitle: "Повторить", ButtonTitle2: "Не надо"){ [weak self] in
+            guard let self = self else { return }
+            guard let stringURL = photoUrl,let url = URL(string: stringURL) else { return }
+            self.loadAndSetImage(fullImageURL: url)
+        }
+    }
   
     /*
     // MARK: - Navigation

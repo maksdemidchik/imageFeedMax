@@ -11,7 +11,6 @@ import Foundation
 final class ProfileService{
     private var prof: Profile?
     private let urlSession = URLSession.shared
-    
     static let sharedProfile = ProfileService()
     
     private init() {}
@@ -35,35 +34,35 @@ final class ProfileService{
             return
         }
         task?.cancel()
-        lastToken=token
+        lastToken = token
         let request = makeReqest(token: token)
         let task = URLSession.shared.objectTask(for: request){ [weak self] (result:Result<ProfileResult,Error>) in
             guard let self = self else { return }
             switch result{
             case .success(let profileInformation):
-                var bio=""
+                var bio = ""
                 if let bio1 = profileInformation.bio{
                     bio=bio1
                 }
-                var firstName=""
+                var firstName = ""
                 if let firstName1 = profileInformation.firstName{
                     firstName=firstName1
                 }
-                var secondName=""
+                var secondName = ""
                 if let secondName1 = profileInformation.lastName{
                     secondName=secondName1
                 }
-                let name = firstName+" "+secondName
-                let profile=Profile(username: profileInformation.username,name: name, loginName: ("@"+profileInformation.username),bio:bio)
+                let name = firstName + " " + secondName
+                let profile = Profile(username: profileInformation.username, name: name, loginName: ("@"+profileInformation.username), bio: bio)
                 completion(.success(profile))
             case .failure(let error):
                 print("Error in ProfileService(fetchProfile) : \(error)")
                 completion(.failure(error))
             }
-            self.task=nil
-            self.lastToken=nil
+            self.task = nil
+            self.lastToken = nil
         }
-        self.task=task
+        self.task = task
         task.resume()
     }
     

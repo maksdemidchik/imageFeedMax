@@ -21,10 +21,10 @@ final class OAuth2Service {
     
     var token : String?{
         get {
-            OAuth2TokenStorage().beerToken
+            OAuth2TokenStorage.shared.beerToken
         }
         set{
-            OAuth2TokenStorage().beerToken = newValue
+            OAuth2TokenStorage.shared.beerToken = newValue
         }
     }
     

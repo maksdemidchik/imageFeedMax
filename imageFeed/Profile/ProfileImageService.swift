@@ -36,13 +36,13 @@ final class ProfileImageService{
                 print("Error in ProfileImageService(fetchProfileImageURL) : \(error)")
                 completion(.failure(error))
             }
-            self.task=nil
+            self.task = nil
         }
-        self.task=task
+        self.task = task
         task.resume()
     }
     private func makeReqest(username: String) -> URLRequest{
-        guard let baseURL = URL(string: "https://api.unsplash.com/users/"+username) else{
+        guard let baseURL = URL(string: "https://api.unsplash.com/users/" + username) else{
             print("ошибка получения URL")
             preconditionFailure("Unable to construct baseURL")
         }
@@ -55,5 +55,8 @@ final class ProfileImageService{
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
         return request
+    }
+    func cleanAvatarUrl(){
+        avatarURL = nil
     }
 }

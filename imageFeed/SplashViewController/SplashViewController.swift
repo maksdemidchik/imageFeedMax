@@ -11,15 +11,13 @@ final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
     private let profileImageService = ProfileImageService.shared
     private let profileService = ProfileService.sharedProfile
-    private let showAuthenticationScreenIdentifier = "ShowAuthenticationScreen"
     private let alertPres=AlertPresenter.shared
     private var splashImage: UIImageView{
-        let imgView=UIImageView()
-        let img=UIImage(named: "1. Splash Screen (базовая версия) 1")
-        imgView.image=img
+        let imgView = UIImageView()
+        let img = UIImage(named: "1. Splash Screen (базовая версия) 1")
+        imgView.image = img
         return imgView
     }
-    private var beerToken = OAuth2TokenStorage().beerToken
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         transitionDuringAuthorization()
@@ -52,7 +50,7 @@ final class SplashViewController: UIViewController {
         guard let token=oauth2Service.token else { return }
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token){ [weak self] result in
-            guard let self=self else {
+            guard let self = self else {
                 print("error")
                 return
             }
@@ -61,7 +59,7 @@ final class SplashViewController: UIViewController {
                 self.switchToTabBarController()
                 let profile=Profile(username: profile.username, name: profile.name, loginName: profile.loginName, bio: profile.bio)
                 self.profileService.profile = profile
-                self.profileImageService.fetchProfileImageURL(username: profile.username){_ in 
+                self.profileImageService.fetchProfileImageURL(username: profile.username){ _ in
                     
                 }
                 
@@ -80,7 +78,6 @@ final class SplashViewController: UIViewController {
             switch result {
             case .success:
                 self.fetchProfile{
-                  
                    UIBlockingProgressHUD.dismiss()
                 }
             case .failure:
@@ -115,7 +112,7 @@ final class SplashViewController: UIViewController {
     }
     
     private func transitionDuringAuthorization(){
-        if let token = OAuth2TokenStorage().beerToken {
+        if let token = OAuth2TokenStorage.shared.beerToken {
             UIBlockingProgressHUD.show()
             self.fetchProfile{ [weak self] in
                 guard let self = self else { return }
