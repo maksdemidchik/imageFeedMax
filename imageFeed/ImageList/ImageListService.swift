@@ -102,5 +102,6 @@ final class ImageListService{
     }
     func cleanPhoto(){
         photos.removeAll()
+        lastLoadedPage = 0
     }
 }
