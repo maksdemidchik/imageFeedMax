@@ -74,7 +74,7 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logoutButtonAction() {
-        alert.showAlertTwoButton(self, title: "Пока, пока!", message: "Уверены, что хотите выйти?", ButtonTitle: "Да", ButtonTitle2: "Нет"){ [weak self] in
+        alert.showAlertTwoButton(self, title: "Пока, пока!", message: "Уверены, что хотите выйти?", buttonTitle: "Да", buttonTitleTwo: "Нет"){ [weak self] in
             guard let self = self else { return }
             self.profileLogoutService.logout()
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
@@ -114,7 +114,7 @@ final class ProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 44).isActive = true
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
-    func updateAvatar(){
+    private func updateAvatar(){
         guard let profileImageUrl = ProfileImageService.shared.avatarURL,let url = URL(string: profileImageUrl) else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 90,backgroundColor: .ypBlack)
         avatarImage.kf.indicatorType = .activity

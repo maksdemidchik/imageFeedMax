@@ -11,7 +11,7 @@ import Foundation
 final class ProfileImageService{
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let oauth2Service = OAuth2Service.shared
-    private (set) var avatarURL: String?
+    private(set) var avatarURL: String?
     private var task: URLSessionTask?
     static let shared = ProfileImageService()
     private init(){}

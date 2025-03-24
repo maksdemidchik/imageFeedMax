@@ -71,7 +71,7 @@ final class SingleImageViewController: UIViewController {
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
-            case .success(let imageResult):
+            case .success:
                 self.imgSetAndSize()
             case .failure:
                 self.showError()
@@ -80,7 +80,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func showError(){
-        alert.showAlertTwoButton(self, title: "Что-то пошло не так", message: "Попробовать ещё раз?", ButtonTitle: "Повторить", ButtonTitle2: "Не надо"){ [weak self] in
+        alert.showAlertTwoButton(self, title: "Что-то пошло не так", message: "Попробовать ещё раз?", buttonTitle: "Повторить", buttonTitleTwo: "Не надо"){ [weak self] in
             guard let self = self else { return }
             guard let stringURL = photoUrl,let url = URL(string: stringURL) else { return }
             self.loadAndSetImage(fullImageURL: url)

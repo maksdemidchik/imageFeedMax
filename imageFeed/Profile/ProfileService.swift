@@ -66,7 +66,7 @@ final class ProfileService{
         task.resume()
     }
     
-    func makeReqest(token: String) -> URLRequest{
+    private func makeReqest(token: String) -> URLRequest{
         guard let baseURL = URL(string: "https://api.unsplash.com/me") else{
             print("ошибка получения URL")
             preconditionFailure("Unable to construct baseURL")

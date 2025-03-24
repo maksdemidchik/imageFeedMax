@@ -6,8 +6,9 @@
 //
 
 import Foundation
+
 final class ImageListService{
-    private (set) var photos: [Photo] = []
+    private(set) var photos: [Photo] = []
     private let oauth2Service = OAuth2Service.shared
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
@@ -23,7 +24,7 @@ final class ImageListService{
         let task = URLSession.shared.objectTask(for: request){[weak self] (result:Result<PhotoForLike,Error>) in
             guard let self = self else { return }
             switch result{
-            case . success(let like):
+            case .success(let like):
                 let like = like.photo.isLiked
                 if let index = self.photos.firstIndex(where: {$0.id == photoId}){
                     let photo = self.photos[index]

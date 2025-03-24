@@ -17,12 +17,11 @@ final class ImagesListViewController: UIViewController {
     private let alert = AlertPresenter.shared
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var imageListServiceObserver: NSObjectProtocol?
-    let dateFormatter2 = ISO8601DateFormatter()
+    private let dateFormatterTwo = ISO8601DateFormatter()
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.locale = Locale(identifier: "ru_Ru")
-        formatter.timeStyle = .none
+        formatter.dateFormat = "d MMMM yyyy"
+        formatter.locale = Locale(identifier: "ru_RU")
         return formatter
     }()
     
@@ -56,7 +55,7 @@ extension ImagesListViewController{
         cell.imageCell.kf.indicatorType = .activity
         cell.imageCell.layer.cornerRadius = 15
         cell.imageCell.layer.masksToBounds = true
-        if let date = photos[indexPath.row].createdAt, let finalDate = dateFormatter2.date(from: date) {
+        if let date = photos[indexPath.row].createdAt, let finalDate = dateFormatterTwo.date(from: date) {
             cell.dataLabel.text=dateFormatter.string(from: finalDate)
         }
         else{
@@ -65,7 +64,6 @@ extension ImagesListViewController{
         let isLiked = photos[indexPath.row].isLiked
         let image = isLiked ? UIImage(named:  "like_button_on") : UIImage(named:  "like_button_off")
         cell.likeButton.setImage(image, for: .normal)
-        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     private func imageListObserver(){
         imageListServiceObserver = NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
@@ -73,7 +71,8 @@ extension ImagesListViewController{
             self.updateTableViewAnimated()
         }
     }
-    func updateTableViewAnimated() {
+    private func updateTableViewAnimated() {
+        guard let tableView = tableView else { return }
         let oldCount = photos.count
         let newCount = imgService.photos.count
         photos = imgService.photos
@@ -135,7 +134,10 @@ extension ImagesListViewController: ImagesListCellDelegate {
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
         imgService.changeLike(photoId: photo.id, isLike: !photo.isLiked) {[weak self] result in
-            guard let self = self else { return }
+            guard let self = self else {
+                UIBlockingProgressHUD.dismiss()
+                return
+            }
             switch result {
             case .success:
                 self.photos = self.imgService.photos
