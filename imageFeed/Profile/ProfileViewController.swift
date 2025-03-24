@@ -10,8 +10,10 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let alert = AlertPresenter.shared
+    private let profileLogoutService = ProfileLogoutService.shared
     private let profileService = ProfileService.sharedProfile
-    private var beerToken = OAuth2TokenStorage().beerToken
+    private var beerToken = OAuth2TokenStorage.shared.beerToken
     private var avatarImage: UIImageView = {
         let view = UIImageView()
         let image = UIImage(named:"avatar")
@@ -62,7 +64,7 @@ final class ProfileViewController: UIViewController {
         let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
         buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
         self.logOutButton = logOutButton
-        profileImageServiceObserver=NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){[weak self] _ in
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
             guard let self = self else { return }
             self.updateAvatar()
             
@@ -72,7 +74,14 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logoutButtonAction() {
-        // TODO: - Добавить логику при нажатии на кнопку
+        alert.showAlertTwoButton(self, title: "Пока, пока!", message: "Уверены, что хотите выйти?", buttonTitle: "Да", buttonTitleTwo: "Нет"){ [weak self] in
+            guard let self = self else { return }
+            self.profileLogoutService.logout()
+            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+            let vc = SplashViewController()
+            window.rootViewController = vc
+            window.makeKeyAndVisible()
+        }
     }
 
     private func labelSettings(label: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
@@ -105,7 +114,7 @@ final class ProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 44).isActive = true
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
-    func updateAvatar(){
+    private func updateAvatar(){
         guard let profileImageUrl = ProfileImageService.shared.avatarURL,let url = URL(string: profileImageUrl) else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 90,backgroundColor: .ypBlack)
         avatarImage.kf.indicatorType = .activity
