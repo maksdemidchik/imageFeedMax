@@ -27,6 +27,8 @@ class AlertPresenter{
         }
         let secondAction = UIAlertAction(title: buttonTitleTwo, style: .default) { _ in
         }
+        alert.view.accessibilityIdentifier = "alert"
+        action.accessibilityIdentifier = "Yes"
         alert.addAction(action)
         alert.addAction(secondAction)
         vc.present(alert, animated: true)

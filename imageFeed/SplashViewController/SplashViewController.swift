@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service.shared
@@ -82,7 +83,6 @@ final class SplashViewController: UIViewController {
                 }
             case .failure:
                 showAlert()
-                
             }
         }
         

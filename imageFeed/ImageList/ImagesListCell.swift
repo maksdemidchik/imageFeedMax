@@ -10,18 +10,16 @@ import Kingfisher
 protocol ImagesListCellDelegate: AnyObject {
     func imageListCellDidTapLike(_ cell: ImagesListCell)
 }
-final class ImagesListCell: UITableViewCell {
+public final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var imageCell: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var dataLabel: UILabel!
     weak var delegate: ImagesListCellDelegate?
     static let reuseIdentifier = "ImagesListCell"
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         imageCell.kf.cancelDownloadTask()
-        
     }
-    
     
     @IBAction private func likeButtonClicked(_ sender: Any) {
         delegate?.imageListCellDidTapLike(self)

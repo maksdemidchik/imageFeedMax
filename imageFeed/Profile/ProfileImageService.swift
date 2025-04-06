@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class ProfileImageService{
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let oauth2Service = OAuth2Service.shared

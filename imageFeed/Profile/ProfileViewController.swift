@@ -8,12 +8,15 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func updateAvatar(url:URL)
+    func setUserInfo(profile: Profile?)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     private var profileImageServiceObserver: NSObjectProtocol?
     private let alert = AlertPresenter.shared
-    private let profileLogoutService = ProfileLogoutService.shared
-    private let profileService = ProfileService.sharedProfile
-    private var beerToken = OAuth2TokenStorage.shared.beerToken
     private var avatarImage: UIImageView = {
         let view = UIImageView()
         let image = UIImage(named:"avatar")
@@ -47,40 +50,19 @@ final class ProfileViewController: UIViewController {
         let button = UIButton()
         return button
     }()
-    
+    var presenter: ProfilePresenterProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let profile = profileService.profile else {
-            print("error")
-            return
-        }
-        nameLabel.text = profile.name
-        loginNameLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio
-        imageSettings(image: avatarImage)
-        labelSettings(label: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
-        labelSettings(label: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
-        labelSettings(label: descriptionLabel, choiseBefore: "label", before1: avatarImage,before2: loginNameLabel)
-        let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
-        buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
-        self.logOutButton = logOutButton
-        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-            
-        }
+        updateUI()
+        profileImageObserver()
         self.view.backgroundColor = .ypBlack
-        updateAvatar()
+        presenter?.viewDidLoad()
     }
     
     @objc private func logoutButtonAction() {
         alert.showAlertTwoButton(self, title: "Пока, пока!", message: "Уверены, что хотите выйти?", buttonTitle: "Да", buttonTitleTwo: "Нет"){ [weak self] in
             guard let self = self else { return }
-            self.profileLogoutService.logout()
-            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-            let vc = SplashViewController()
-            window.rootViewController = vc
-            window.makeKeyAndVisible()
+            self.presenter?.reset()
         }
     }
 
@@ -114,13 +96,37 @@ final class ProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 44).isActive = true
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
-    private func updateAvatar(){
-        guard let profileImageUrl = ProfileImageService.shared.avatarURL,let url = URL(string: profileImageUrl) else { return }
+    private func updateUI(){
+        imageSettings(image: avatarImage)
+        labelSettings(label: nameLabel, choiseBefore: "ImageView", before1: avatarImage, before2: nameLabel)
+        labelSettings(label: loginNameLabel, choiseBefore: "label", before1: avatarImage,before2: nameLabel)
+        labelSettings(label: descriptionLabel, choiseBefore: "label", before1: avatarImage,before2: loginNameLabel)
+        let logOutButton = UIButton.systemButton(with: UIImage(named: "logout_button") ?? UIImage(), target: self, action: #selector(self.logoutButtonAction))
+        buttonSettings(button: logOutButton, textColor: .redYP, image: avatarImage)
+        self.logOutButton = logOutButton
+        self.view.backgroundColor = .ypBlack
+        logOutButton.accessibilityIdentifier = "logOutButton"
+    }
+    
+    private func profileImageObserver(){
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main){ [weak self] _ in
+            guard let self = self else { return }
+            self.presenter?.updateAvatar()
+        }
+    }
+    func updateAvatar(url:URL){
         let processor = RoundCornerImageProcessor(cornerRadius: 90,backgroundColor: .ypBlack)
         avatarImage.kf.indicatorType = .activity
         avatarImage.kf.setImage(with: url,
                               placeholder: UIImage(named: "placeholder.jpeg"),
                               options: [.processor(processor)])
+    }
+    func setUserInfo(profile: Profile?){
+        if let profile{
+            nameLabel.text = profile.name
+            loginNameLabel.text = profile.loginName
+            descriptionLabel.text = profile.bio
+        }
     }
 
 }
