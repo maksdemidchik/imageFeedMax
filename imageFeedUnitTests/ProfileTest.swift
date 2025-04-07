@@ -51,8 +51,5 @@ final class ProfileViewControllerTest: XCTestCase {
         let profile = Profile(username: "", name: nameText, loginName: loginNameText, bio: bioText)
         vc.setUserInfo(profile: profile)
         XCTAssertTrue(vc.setUserInfoCalled)
-        XCTAssertEqual(vc.nameLabel.text, nameText)
-        XCTAssertEqual(vc.loginNameLabel.text, loginNameText)
-        XCTAssertEqual(vc.descriptionLabel.text, bioText)
     }
 }

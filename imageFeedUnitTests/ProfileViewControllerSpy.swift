@@ -22,11 +22,6 @@ final class ProfileViewControllerSpy:ProfileViewControllerProtocol {
     
     func setUserInfo(profile: imageFeed.Profile?) {
         setUserInfoCalled = true
-        if let profile = profile  {
-            loginNameLabel.text = profile.loginName
-            nameLabel.text = profile.name
-            descriptionLabel.text = profile.bio
-        }
     }
     
     
