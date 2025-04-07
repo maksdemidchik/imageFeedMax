@@ -50,7 +50,7 @@ final class ImageListService{
         let task = URLSession.shared.objectTask(for: request){ [weak self ] (result:Result<[PhotoResult],Error>) in
             guard let self = self else { return }
             switch result{
-             case .success(let photoResult):
+            case .success(let photoResult):
                 photoResult.forEach{photo in
                     let newPhoto = Photo(id: photo.id, size: CGSize(width: photo.width, height: photo.height), createdAt: photo.createdAt, description: photo.description, thumbImageURL: photo.urls.thumb, largeImageURL: photo.urls.full, isLiked: photo.isLiked)
                     self.photos.append(newPhoto)
@@ -59,7 +59,7 @@ final class ImageListService{
                 self.lastLoadedPage = nextPage
                 
                 NotificationCenter.default.post(name: ImageListService.didChangeNotification, object: self)
-             case .failure(let error):
+            case .failure(let error):
                 print("Error in ImageListService(fetchPhotosNextPage) : \(error)")
                 completion(.failure(error))
             }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct ProfileImage:Codable{
     let small: String?
     let medium: String?
@@ -17,6 +18,7 @@ struct ProfileImage:Codable{
         case large
     }
 }
+
 struct UserResult:Codable{
     let profileImage: ProfileImage
     enum CodingKeys: String, CodingKey {

@@ -24,7 +24,7 @@ final class imageFeedUITests: XCTestCase {
         let webView = app.webViews["UnsplashWebView"]
         
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
-
+        
         let loginTextField = webView.descendants(matching: .textField).element
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
@@ -68,7 +68,7 @@ final class imageFeedUITests: XCTestCase {
     func testProfile() throws {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
-       
+        
         XCTAssertTrue(app.staticTexts[fullName].exists)
         XCTAssertTrue(app.staticTexts[username].exists)
         app.buttons["logOutButton"].tap()

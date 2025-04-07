@@ -26,18 +26,18 @@ final class ImagesListTest: XCTestCase {
         let _ = presenter.updateInfoForTableViewAnimate()
         XCTAssertTrue(presenter.updateInfoForTableViewAnimateCalled)
     }
-    func testcheckingIfNeedToLoadNewPhotos(){
+    func testCheckingIfNeedToLoadNewPhotos(){
         _ = vc.view
         presenter.checkingIfNeedToLoadNewPhotos(indexPath: indexPath)
         XCTAssertTrue(presenter.checkingIfNeedToLoadNewPhotos)
     }
-    func testcountPhotos(){
+    func testCountPhotos(){
         _ = vc.view
         let countPhotos = presenter.countPhotos()
         XCTAssertTrue(presenter.countPhotosCalled)
         XCTAssertEqual(countPhotos, 0)
     }
-    func testreturnPhotosIndexPaths(){
+    func testReturnPhotosIndexPaths(){
         _ = vc.view
         _ = presenter.returnPhotosIndexPaths(indexPath: indexPath)
         XCTAssertTrue(presenter.returnPhotosIndexPathsCalled)

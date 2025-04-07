@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 public protocol ImagesListPresenterProtocol : AnyObject {
     var view: ImagesListViewControllerProtocol? { get set }
     func imageListCellDidTapLike(_ cell: ImagesListCell,indexPath:IndexPath)
@@ -52,7 +53,7 @@ final class ImageListPresenter: ImagesListPresenterProtocol {
                 self.view?.showAlert()
             }
         }
-
+        
     }
     
     func checkingIfNeedToLoadNewPhotos(indexPath: IndexPath) {

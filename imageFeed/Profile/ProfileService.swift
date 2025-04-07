@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 final class ProfileService{
     private var prof: Profile?
     private let urlSession = URLSession.shared
@@ -77,6 +76,6 @@ final class ProfileService{
         print(request)
         return request
     }
-   
+    
     
 }

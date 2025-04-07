@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct ProfileResult:Codable{
     let username: String
     let firstName: String?
@@ -17,7 +18,7 @@ struct ProfileResult:Codable{
         case lastName = "last_name"
         case bio
     }
-   
+    
 }
 
 public struct Profile{

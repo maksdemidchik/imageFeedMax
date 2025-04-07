@@ -37,7 +37,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
             guard
                 let viewController = segue.destination as?
                     SingleImageViewController,
-                    let indexPath = sender as? IndexPath
+                let indexPath = sender as? IndexPath
             else {
                 assertionFailure("Invalid segue destination")
                 return
@@ -53,8 +53,7 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
 
 extension ImagesListViewController{
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let photos = presenter?.returnPhotosIndexPaths(indexPath: indexPath) else { return }
-        guard let url = URL(string: photos.thumbImageURL) else {return}
+        guard let photos = presenter?.returnPhotosIndexPaths(indexPath: indexPath),let url = URL(string: photos.thumbImageURL) else { return }
         cell.imageCell.kf.setImage(with: url,placeholder: UIImage(named: "placeholder"))
         cell.imageCell.kf.indicatorType = .activity
         cell.imageCell.layer.cornerRadius = 15
@@ -76,8 +75,7 @@ extension ImagesListViewController{
         }
     }
     private func updateTableViewAnimated() {
-        guard let tableView = tableView else { return }
-        guard let x = presenter?.updateInfoForTableViewAnimate() else { return }
+        guard let tableView = tableView,let x = presenter?.updateInfoForTableViewAnimate()  else { return }
         let oldCount = x[0]
         let newCount = x[1]
         if oldCount != newCount {
@@ -92,7 +90,7 @@ extension ImagesListViewController{
     func showAlert(){
         alert.showAlert(self, title: "Что-то пошло не так", message: "Не удалось изменить лайк", ButtonTitle: "Ок"){ }
     }
-      
+    
 }
 extension ImagesListViewController: UITableViewDelegate{
     
@@ -102,9 +100,8 @@ extension ImagesListViewController: UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let imageCell = presenter?.returnPhotosIndexPaths(indexPath: indexPath) else {return 0}
+        guard let imageCell = presenter?.returnPhotosIndexPaths(indexPath: indexPath),view != nil else {return 0}
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        guard let view else { return 0 }
         let scale = (tableView.bounds.width - imageInsets.left - imageInsets.right) / imageCell.size.width
         let cellHeight = imageCell.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
@@ -126,13 +123,13 @@ extension ImagesListViewController: UITableViewDataSource{
         return imageListCell
     }
     func tableView(
-      _ tableView: UITableView,
-      willDisplay cell: UITableViewCell,
-      forRowAt indexPath: IndexPath
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
     ) {
         presenter?.checkingIfNeedToLoadNewPhotos(indexPath: indexPath)
     }
-
+    
 }
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {

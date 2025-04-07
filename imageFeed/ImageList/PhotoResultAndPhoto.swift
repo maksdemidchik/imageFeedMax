@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public struct Photo {
     let id: String
     let size: CGSize
@@ -15,6 +16,7 @@ public struct Photo {
     let largeImageURL: String
     let isLiked: Bool
 }
+
 struct PhotoResult: Codable {
     let id: String
     let createdAt: String?
@@ -33,6 +35,7 @@ struct PhotoResult: Codable {
         case isLiked = "liked_by_user"
     }
 }
+
 struct UrlsResult: Codable {
     let thumb: String
     let full: String

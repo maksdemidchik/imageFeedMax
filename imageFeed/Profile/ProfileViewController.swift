@@ -65,7 +65,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             self.presenter?.reset()
         }
     }
-
+    
     private func labelSettings(label: UILabel,choiseBefore:String,before1: UIImageView,before2: UILabel)
     {
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -118,8 +118,8 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         let processor = RoundCornerImageProcessor(cornerRadius: 90,backgroundColor: .ypBlack)
         avatarImage.kf.indicatorType = .activity
         avatarImage.kf.setImage(with: url,
-                              placeholder: UIImage(named: "placeholder.jpeg"),
-                              options: [.processor(processor)])
+                                placeholder: UIImage(named: "placeholder.jpeg"),
+                                options: [.processor(processor)])
     }
     func setUserInfo(profile: Profile?){
         if let profile{
@@ -128,5 +128,5 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
             descriptionLabel.text = profile.bio
         }
     }
-
+    
 }

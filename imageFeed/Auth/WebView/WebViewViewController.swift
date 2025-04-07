@@ -40,8 +40,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         webView.accessibilityIdentifier = "UnsplashWebView"
         webView.navigationDelegate = self
         estimatedProgressObservation=webView.observe( \.estimatedProgress,options: []){ [weak self] _, _ in
-                guard let self = self else { return }
-                self.presenter?.didUpdateProgressValue(webView.estimatedProgress)
+            guard let self = self else { return }
+            self.presenter?.didUpdateProgressValue(webView.estimatedProgress)
         }
         presenter?.viewDidLoad()
         let backButton = UIButton.systemButton(with: UIImage(named: "nav_back_button_white") ?? UIImage(), target: self, action: #selector(self.backButtonAction))
@@ -80,7 +80,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     @objc private func backButtonAction() {
         dismiss(animated: true)
     }
-
+    
 }
 
 extension WebViewViewController: WKNavigationDelegate {

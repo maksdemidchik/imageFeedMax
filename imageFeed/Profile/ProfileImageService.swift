@@ -21,7 +21,7 @@ final class ProfileImageService{
         let task = URLSession.shared.objectTask(for: request){ [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             switch result{
-                case .success(let userResult):
+            case .success(let userResult):
                 guard let avatarURLString = userResult.profileImage.large else {
                     return
                 }

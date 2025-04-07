@@ -64,9 +64,9 @@ final class SplashViewController: UIViewController {
                     
                 }
                 
-
+                
             case .failure(let error):
-               print("Error in fetchProfile:\(error)")
+                print("Error in fetchProfile:\(error)")
             }
             completion()
             
@@ -79,7 +79,7 @@ final class SplashViewController: UIViewController {
             switch result {
             case .success:
                 self.fetchProfile{
-                   UIBlockingProgressHUD.dismiss()
+                    UIBlockingProgressHUD.dismiss()
                 }
             case .failure:
                 showAlert()
@@ -108,7 +108,7 @@ final class SplashViewController: UIViewController {
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
         print("auth")
-          
+        
     }
     
     private func transitionDuringAuthorization(){
@@ -135,16 +135,16 @@ final class SplashViewController: UIViewController {
             }
         }
     }
-   
+    
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-            dismiss(animated: true) { [weak self] in
-                guard let self = self else { return }
-                self.fetchoathToken(code: code)
-            }
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            self.fetchoathToken(code: code)
         }
+    }
 }
 
 
