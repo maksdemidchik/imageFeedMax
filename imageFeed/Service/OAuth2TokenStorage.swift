@@ -32,12 +32,12 @@ final class OAuth2TokenStorage{
             guard isSuccess else {
                 return
             }
-         
+            
         }
     }
     func clean(){
         guard KeychainWrapper.standard.removeObject(forKey: Keys.beerToken.rawValue) else {
-                print("Error cleaning Keychain")
+            print("Error cleaning Keychain")
             return
         }
     }

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     
@@ -19,7 +18,6 @@ final class AuthViewController: UIViewController {
     @IBOutlet private weak var authButton: UIButton!
     
     private let webViewSegueIndentifier = "ShowWebView"
-    private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -34,6 +32,10 @@ final class AuthViewController: UIViewController {
                 assertionFailure("Failed to prepare for \(webViewSegueIndentifier)")
                 return
             }
+            let authHelper = AuthHelper()
+            let webPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewController.presenter = webPresenter
+            webPresenter.view = webViewController
             webViewController.delegate = self
         }
         else{
@@ -42,18 +44,18 @@ final class AuthViewController: UIViewController {
     }
     
     
-
+    
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-         self.delegate?.authViewController(self, didAuthenticateWithCode: code)
-        }
+        self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+    }
     
-                
-        
-
-        func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
-            vc.dismiss(animated: true)
-        }
+    
+    
+    
+    func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
+        vc.dismiss(animated: true)
+    }
 }

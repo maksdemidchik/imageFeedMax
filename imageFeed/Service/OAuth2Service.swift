@@ -68,20 +68,20 @@ final class OAuth2Service {
             preconditionFailure("Unable to construct baseURL")
         }
         
-         guard let url = URL(
-             string: "/oauth/token"
-             + "?client_id=\(Constants.accessKey)"
-             + "&&client_secret=\(Constants.secretKey)"
-             + "&&redirect_uri=\(Constants.redirectURI)"
-             + "&&code=\(code)"
-             + "&&grant_type=authorization_code",
-             relativeTo: baseURL
-         ) else{
-             print("ошибка получения URLRequest")
-             preconditionFailure("Unable to construct URLRequest")
-         }
-         var request = URLRequest(url: url)
-         request.httpMethod = "POST"
-         return request
-     }
+        guard let url = URL(
+            string: "/oauth/token"
+            + "?client_id=\(Constants.accessKey)"
+            + "&&client_secret=\(Constants.secretKey)"
+            + "&&redirect_uri=\(Constants.redirectURI)"
+            + "&&code=\(code)"
+            + "&&grant_type=authorization_code",
+            relativeTo: baseURL
+        ) else{
+            print("ошибка получения URLRequest")
+            preconditionFailure("Unable to construct URLRequest")
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        return request
+    }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import WebKit
+
 final class ProfileLogoutService {
     private var profileImageService = ProfileImageService.shared
     private var imgService = ImageListService.shared
